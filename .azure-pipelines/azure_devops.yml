@@ -19,4 +19,4 @@ variables:
   JTREG_VERSION: "6.1"
 
 stages:
-  - template: /.devops_jdk11u/release.yml
+  - template: /.devops_jdk11u/release.yml@jdk-harness
