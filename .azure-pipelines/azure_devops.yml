@@ -13,7 +13,7 @@ resources:
     - repository: jdk-harness
       type: git
       name: Devdiv/jdk-harness
-      ref: refs/heads/shwethac/add_pipelinefile
+      ref: refs/heads/main
 
 variables:
   JTREG_VERSION: "6.1"
