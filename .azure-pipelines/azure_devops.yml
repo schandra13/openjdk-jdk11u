@@ -12,11 +12,11 @@ resources:
   repositories:
     - repository: jdk-harness
       type: git
-      name: DevDiv/jdk-harness
+      #name: DevDiv/jdk-harness
       #ref: refs/heads/main
       ref: refs/heads/shwethac/test-release
       # refs/heads/shwethac/test-release  point to feature in azure devops
-      #project: "Devdiv"
+      project: "DevDiv"
 
 variables:
   JTREG_VERSION: "6.1"
