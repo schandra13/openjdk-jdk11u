@@ -12,7 +12,7 @@ resources:
   repositories:
     - repository: jdk-harness
       type: git
-      name: Devdiv/jdk-harness
+      name: DevDiv/jdk-harness
       #ref: refs/heads/main
       ref: refs/heads/shwethac/test-release
       # refs/heads/shwethac/test-release  point to feature in azure devops
