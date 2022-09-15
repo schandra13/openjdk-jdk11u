@@ -16,7 +16,7 @@ resources:
       #ref: refs/heads/main
       ref: refs/heads/shwethac/test-release
       # refs/heads/shwethac/test-release  point to feature in azure devops
-      project: "DevDiv"
+      #project: "DevDiv"
 
 variables:
   JTREG_VERSION: "6.1"
