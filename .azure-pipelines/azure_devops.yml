@@ -99,7 +99,7 @@ stages:
       build_platforms : ${{parameters.build_platforms}}
       installers_platforms : ${{parameters.installers_platforms}}
       test_platforms : ${{parameters.test_platforms}} 
-      shenandoah_test_platforms : ${{parameters.shenandoah_test_platforms}} 
+      #shenandoah_test_platforms : ${{parameters.shenandoah_test_platforms}} 
       release_type : ${{parameters.release_type}}
       release_name : ${{parameters.release_name}}
       comments : ${{parameters.comments}}   
