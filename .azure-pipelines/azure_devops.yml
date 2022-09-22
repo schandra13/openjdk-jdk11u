@@ -18,8 +18,7 @@ parameters:
     - linux_aarch64
     - macOS
     - macOS_aarch64
-    - windows
-    - windows_x86
+    - windows    
     - windows_aarch64
     - mariner_x64
     - mariner_aarch64
@@ -33,9 +32,20 @@ parameters:
     - macOS
     - macOS_aarch64
     - windows
-    - windows_x86
     - windows_aarch64
     - alpine_x64
+    
+- name: shenandoah_test_platforms
+  displayName: Shenandoah test platforms
+  type: object
+  default:
+    - linux
+    - linux_aarch64
+    - macOS
+    - windows
+    - windows_aarch64
+    - alpine_x64
+    
 - name: release_type
   displayName: Release type
   type: string
@@ -90,6 +100,7 @@ stages:
       build_platforms : ${{parameters.build_platforms}}
       installers_platforms : ${{parameters.installers_platforms}}
       test_platforms : ${{parameters.test_platforms}} 
+      shenandoah_test_platforms : ${{parameters.shenandoah_test_platforms}} 
       release_type : ${{parameters.release_type}}
       release_name : ${{parameters.release_name}}
       comments : ${{parameters.comments}}   
