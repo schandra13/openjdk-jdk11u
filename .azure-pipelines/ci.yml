@@ -1,0 +1,60 @@
+parameters:
+- name: build_platforms
+  displayName: Build platforms
+  type: object
+  default:
+    - linux
+    - linux_aarch64
+    - macOS
+    - windows
+    - windows_aarch64
+- name: test_platforms
+  displayName: Test platforms
+  type: object
+  default:
+    - linux
+    - linux_aarch64
+    - macOS
+    - windows
+    - windows_aarch64
+
+name: "$(Year:yyyy).$(Month).$(BuildID)-ci"
+
+trigger:
+  # to make the ci build more efficient
+  # https://docs.microsoft.com/en-us/azure/devops/pipelines/repos/azure-repos-git?view=azure-devops&tabs=yaml#batching-ci-runs
+  batch: true
+  branches:
+    include:
+      - shwethac/devops
+  # for changes in the nightly, pr, release.yml, etc we will ignore them
+  # also ignore templates/release.yml since it is not used by ci.yml file
+  paths:
+    exclude:
+      # from .devops folder
+      - .devops/nightly.yml
+      - .devops/pr.yml
+      - .devops/release.yml
+      # from .devops/templates folder
+      - .devops/templates/pr
+      - .devops/templates/nightly
+      - .devops/templates/release
+      - .devops/templates/compliance
+
+pr: none
+
+resources:
+  repositories:
+    - repository: jdk_harness
+      type: git
+      name: DevDiv/jdk-harness
+      ref: refs/heads/main
+
+stages:
+  - template: /.devops/jdk11u/ci.yml@jdk-harness
+
+    parameters: 
+      build_platforms : ${{parameters.build_platforms}}
+      installers_platforms : ${{parameters.installers_platforms}}
+      test_platforms : ${{parameters.test_platforms}} 
+      
