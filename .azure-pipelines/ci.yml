@@ -55,6 +55,6 @@ stages:
 
     parameters: 
       build_platforms : ${{parameters.build_platforms}}
-      installers_platforms : ${{parameters.installers_platforms}}
+      shenandoah_test_platforms : ${{parameters.shenandoah_test_platforms}}
       test_platforms : ${{parameters.test_platforms}} 
       
