@@ -1,0 +1,113 @@
+name: "$(Year:yyyy).$(Month).$(BuildID)-nightly"
+
+parameters:
+- name: build
+  type: string
+  displayName: CI build
+  default: latest
+  values:
+    - latest
+    - latestSucceeded
+    - buildID
+- name: buildID
+  type: number
+  default: 0
+- name: test_platforms
+  displayName: Test platforms
+  type: object
+  default:
+    - linux
+    - linux_aarch64
+    - macOS
+    - windows
+    - windows_aarch64
+
+trigger: none
+
+pr: none
+
+variables:
+  - group: "Linux Repo Release"
+
+schedules:
+  # At 5am UTC (10pm PST) on Tuesday and Friday
+  - cron: "0 5 * * 2,5"
+    displayName: Nightly
+    always: false # only run if there has been code changes to the jdk codebase
+    branches:
+      include:
+        - main
+
+resources:
+  repositories:
+    - repository: jdk-harness
+      type: git
+      name: DevDiv/jdk-harness
+      ref: shwethac/devops
+stages:
+  - stage: prepare
+    displayName: prepare
+    jobs:
+      - template: /.devops_public_templates/utility/jobs/lock_build_id.yml@jdk-harness
+        parameters:
+          reference: lock_build_id
+          task_reference: find_build_id_task
+          build_type: ${{ parameters.build }}
+          specific_build_id: ${{ parameters.buildID }}
+          variable: BUILD_ID
+          pipeline_id: 315
+      - template: /.devops_public_templates/utility/jobs/load_artifacts.yml@jdk-harness
+        parameters:
+          depends_on: lock_build_id
+          build_id: $[ dependencies.lock_build_id.outputs['find_build_id_task.BUILD_ID'] ]
+          artifacts:
+            - ${{ if containsValue(parameters.test_platforms, 'windows') }}:
+              - windows_binaries
+              - windows_fastdebug_binaries
+              - windows_installers_signed
+            - ${{ if containsValue(parameters.test_platforms, 'windows_aarch64') }}:
+              - windows_aarch64_binaries
+              - windows_aarch64_fastdebug_binaries
+              - windows_aarch64_installers_signed
+            - ${{ if containsValue(parameters.test_platforms, 'linux') }}:
+              - linux_binaries
+              - linux_fastdebug_binaries
+              - linux_installers_signed
+            - ${{ if containsValue(parameters.test_platforms, 'linux_aarch64') }}:
+              - linux_aarch64_binaries
+              - linux_aarch64_fastdebug_binaries
+              - linux_aarch64_installers_signed
+            - ${{ if containsValue(parameters.test_platforms, 'macOS') }}:
+              - macOS_binaries
+              - macOS_fastdebug_binaries
+              - macOS_installers_signed
+
+  - template: /.devops/jdk11u/templates/shared/basic_test_fastdebug.yml
+    parameters:
+      active_platforms: ${{ parameters.test_platforms }}
+      depends_on: prepare
+
+  - template: /.devops/jdk11u/templates/shared/basic_test.yml
+    parameters:
+      active_platforms: ${{ parameters.test_platforms }}
+      depends_on: prepare
+
+  - template: /.devops/jdk11u/templates/compliance/sdl.yml
+    parameters:
+      depends_on:
+        - basic_test
+        - basic_test_fastdebug
+
+  - template: /.devops/jdk11u/templates/nightly/nightly_tests.yml
+    parameters:
+      active_platforms: ${{ parameters.test_platforms }}
+      depends_on:
+        - basic_test
+        - basic_test_fastdebug
+
+  - template: /.devops/jdk11u/templates/nightly/tck.yml
+    parameters:
+      active_platforms: ${{ parameters.test_platforms }}
+      depends_on:
+        - basic_test_fastdebug
+        - basic_test

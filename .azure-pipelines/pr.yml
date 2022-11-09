@@ -1,0 +1,51 @@
+parameters:
+- name: build_platforms
+  displayName: Build platforms
+  type: object
+  default:
+    - linux
+    - linux_aarch64
+    - macOS
+    - windows
+    - windows_aarch64
+- name: test_platforms
+  displayName: Test platforms
+  type: object
+  default:
+    - linux
+    - linux_aarch64
+    - macOS
+    - windows
+    - windows_aarch64
+
+name: "$(Year:yyyy).$(Month).$(BuildID)-pr-fastdebug"
+
+trigger: none
+
+pr:
+  autoCancel: "true"
+  branches:
+    include:
+      - shwethac/devops #patches branch
+
+resources:
+  repositories:
+    - repository: jdk-harness
+      type: git
+      name: DevDiv/jdk-harness
+      ref: shwethac/devops
+
+stages:
+  - template: /.devops/jdk11u/templates/pr/build_fastdebug.yml
+    parameters:
+      active_platforms: ${{ parameters.build_platforms }}
+
+  - template: /.devops/jdk11u/templates/shared/basic_test_fastdebug.yml
+    parameters:
+      active_platforms: ${{ parameters.build_platforms }}
+      depends_on: build_fastdebug
+  
+  - template: /.devops/jdk11u/templates/pr/pr_tests.yml
+    parameters:
+      active_platforms: ${{ parameters.test_platforms }}
+      depends_on: basic_test_fastdebug
