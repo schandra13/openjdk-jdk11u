@@ -89,5 +89,3 @@ stages:
       depends_on:
         - basic_test_fastdebug
         - basic_test     
-
-        
