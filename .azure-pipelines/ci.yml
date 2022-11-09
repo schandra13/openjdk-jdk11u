@@ -45,7 +45,7 @@ pr: none
 
 resources:
   repositories:
-    - repository: jdk_harness
+    - repository: jdk-harness
       type: git
       name: DevDiv/jdk-harness
       ref: refs/heads/main
