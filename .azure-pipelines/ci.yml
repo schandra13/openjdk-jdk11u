@@ -48,7 +48,7 @@ resources:
     - repository: jdk-harness
       type: git
       name: DevDiv/jdk-harness
-      ref: refs/heads/main
+      ref: refs/heads/shwethac/devops
 
 stages:
   - template: /.devops/jdk11u/ci.yml@jdk-harness
