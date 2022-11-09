@@ -58,32 +58,32 @@ stages:
       # shenandoah_test_platforms : ${{parameters.shenandoah_test_platforms}}
       test_platforms : ${{parameters.test_platforms}} 
 
-  - template: ./templates/ci/build_fastdebug.yml
+  - template: ./templates/ci/build_fastdebug.yml@jdk-harness
     parameters:
       active_platforms: ${{ parameters.build_platforms }}
 
-  - template: ./templates/ci/build.yml
+  - template: ./templates/ci/build.yml@jdk-harness
     parameters:
       active_platforms: ${{ parameters.build_platforms }}
 
-  - template: ./templates/shared/basic_test_fastdebug.yml
+  - template: ./templates/shared/basic_test_fastdebug.yml@jdk-harness
     parameters:
       active_platforms: ${{ parameters.build_platforms }}
       depends_on: build_fastdebug
 
-  - template: ./templates/shared/basic_test.yml
+  - template: ./templates/shared/basic_test.yml@jdk-harness
     parameters:
       active_platforms: ${{ parameters.build_platforms }}
       depends_on: build
 
-  - template: ./templates/shared/installers.yml
+  - template: ./templates/shared/installers.yml@jdk-harness
     parameters:
       active_platforms: ${{ parameters.build_platforms }}
       depends_on:
         - basic_test_fastdebug
         - basic_test
 
-  - template: ./templates/ci/ci_tests.yml
+  - template: ./templates/ci/ci_tests.yml@jdk-harness
     parameters:
       active_platforms: ${{ parameters.test_platforms }}
       depends_on:
