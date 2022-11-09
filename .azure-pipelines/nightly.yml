@@ -82,30 +82,30 @@ stages:
               - macOS_fastdebug_binaries
               - macOS_installers_signed
 
-  - template: /.devops/jdk11u/templates/shared/basic_test_fastdebug.yml
+  - template: /.devops/jdk11u/templates/shared/basic_test_fastdebug.yml@jdk-harness
     parameters:
       active_platforms: ${{ parameters.test_platforms }}
       depends_on: prepare
 
-  - template: /.devops/jdk11u/templates/shared/basic_test.yml
+  - template: /.devops/jdk11u/templates/shared/basic_test.yml@jdk-harness
     parameters:
       active_platforms: ${{ parameters.test_platforms }}
       depends_on: prepare
 
-  - template: /.devops/jdk11u/templates/compliance/sdl.yml
+  - template: /.devops/jdk11u/templates/compliance/sdl.yml@jdk-harness
     parameters:
       depends_on:
         - basic_test
         - basic_test_fastdebug
 
-  - template: /.devops/jdk11u/templates/nightly/nightly_tests.yml
+  - template: /.devops/jdk11u/templates/nightly/nightly_tests.yml@jdk-harness
     parameters:
       active_platforms: ${{ parameters.test_platforms }}
       depends_on:
         - basic_test
         - basic_test_fastdebug
 
-  - template: /.devops/jdk11u/templates/nightly/tck.yml
+  - template: /.devops/jdk11u/templates/nightly/tck.yml@jdk-harness
     parameters:
       active_platforms: ${{ parameters.test_platforms }}
       depends_on:

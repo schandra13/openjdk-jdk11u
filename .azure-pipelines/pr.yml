@@ -36,16 +36,16 @@ resources:
       ref: shwethac/devops
 
 stages:
-  - template: /.devops/jdk11u/templates/pr/build_fastdebug.yml
+  - template: /.devops/jdk11u/templates/pr/build_fastdebug.yml@jdk-harness
     parameters:
       active_platforms: ${{ parameters.build_platforms }}
 
-  - template: /.devops/jdk11u/templates/shared/basic_test_fastdebug.yml
+  - template: /.devops/jdk11u/templates/shared/basic_test_fastdebug.yml@jdk-harness
     parameters:
       active_platforms: ${{ parameters.build_platforms }}
       depends_on: build_fastdebug
   
-  - template: /.devops/jdk11u/templates/pr/pr_tests.yml
+  - template: /.devops/jdk11u/templates/pr/pr_tests.yml@jdk-harness
     parameters:
       active_platforms: ${{ parameters.test_platforms }}
       depends_on: basic_test_fastdebug
