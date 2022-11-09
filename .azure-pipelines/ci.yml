@@ -18,7 +18,7 @@ parameters:
     - windows
     - windows_aarch64
 
-name: "$(Year:yyyy).$(Month).$(BuildID)-ci"
+name: "$(Year:yyyy).$(Month).$(BuildID)"
 
 trigger:
   # to make the ci build more efficient
