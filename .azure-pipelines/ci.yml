@@ -51,7 +51,7 @@ resources:
       ref: shwethac/devops
 
 stages:
-  - template: /.devops/jdk11u/ci.yml@jdk-harness
+  # - template: /.devops/jdk11u/ci.yml@jdk-harness
 
     # parameters: 
     #   build_platforms : ${{parameters.build_platforms}}
