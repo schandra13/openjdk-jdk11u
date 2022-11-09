@@ -88,9 +88,4 @@ stages:
       active_platforms: ${{ parameters.test_platforms }}
       depends_on:
         - basic_test_fastdebug
-        - basic_test
-
-        
-
-
-      
+        - basic_test     
