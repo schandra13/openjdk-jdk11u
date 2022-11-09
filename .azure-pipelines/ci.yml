@@ -53,8 +53,42 @@ resources:
 stages:
   - template: /.devops/jdk11u/ci.yml@jdk-harness
 
-    parameters: 
-      build_platforms : ${{parameters.build_platforms}}
-      shenandoah_test_platforms : ${{parameters.shenandoah_test_platforms}}
-      test_platforms : ${{parameters.test_platforms}} 
+    #parameters: 
+      # build_platforms : ${{parameters.build_platforms}}
+      # shenandoah_test_platforms : ${{parameters.shenandoah_test_platforms}}
+      # test_platforms : ${{parameters.test_platforms}} 
+
+  - template: ./templates/ci/build_fastdebug.yml
+    parameters:
+      active_platforms: ${{ parameters.build_platforms }}
+
+  - template: ./templates/ci/build.yml
+    parameters:
+      active_platforms: ${{ parameters.build_platforms }}
+
+  - template: ./templates/shared/basic_test_fastdebug.yml
+    parameters:
+      active_platforms: ${{ parameters.build_platforms }}
+      depends_on: build_fastdebug
+
+  - template: ./templates/shared/basic_test.yml
+    parameters:
+      active_platforms: ${{ parameters.build_platforms }}
+      depends_on: build
+
+  - template: ./templates/shared/installers.yml
+    parameters:
+      active_platforms: ${{ parameters.build_platforms }}
+      depends_on:
+        - basic_test_fastdebug
+        - basic_test
+
+  - template: ./templates/ci/ci_tests.yml
+    parameters:
+      active_platforms: ${{ parameters.test_platforms }}
+      depends_on:
+        - basic_test_fastdebug
+        - basic_test
+
+
       
